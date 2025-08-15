@@ -9,7 +9,7 @@ import java.time.LocalDate;
 public class Device {
 
     @Id
-    private long id;
+    private Long id;
     private String name;
     private String brand;
     private DeviceState state;

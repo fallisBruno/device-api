@@ -2,6 +2,9 @@ package com.bruno.device.domain;
 
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class DeviceService {
 
@@ -23,4 +26,22 @@ public class DeviceService {
         return this.deviceRepository.findDeviceById(id);
     }
 
+    public List<DeviceRecord> getAll(){
+        List<DeviceRecord> result = new ArrayList<>();
+        Iterable<Device> devices = this.deviceRepository.findAll();
+        devices.forEach(device -> result.add(this.deviceMapper.toRecord(device)));
+        return result;
+    }
+
+    public void deleteById(Long id) {
+        this.deviceRepository.deleteById(id);
+    }
+
+    public List<DeviceRecord> findAllByBrand(String brand) {
+        return this.deviceRepository.findAllByBrand(brand);
+    }
+
+    public List<DeviceRecord> findAllByState(DeviceState state) {
+        return this.deviceRepository.findAllByState(state);
+    }
 }

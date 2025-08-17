@@ -1,9 +1,12 @@
 package com.bruno.device.domain;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
-@RequestMapping("device")
+@RequestMapping("devices")
 public class DeviceController {
 
     private final DeviceService deviceService;
@@ -18,8 +21,29 @@ public class DeviceController {
     }
 
     @GetMapping("/{id}")
-    public DeviceRecord getDevice(@PathVariable long id) {
+    public DeviceRecord getDeviceById(@PathVariable Long id) {
         return this.deviceService.findById(id);
+    }
+
+    @GetMapping("/all")
+    public List<DeviceRecord> getAllDevices(){
+        return this.deviceService.getAll();
+    }
+
+    @GetMapping("/all-by-brand")
+    public List<DeviceRecord> getAllDevicesByBrand(@RequestParam(name = "brand") String brand) {
+        return this.deviceService.findAllByBrand(brand);
+    }
+
+    @GetMapping("/all-by-state")
+    public List<DeviceRecord> getAllDevicesByState(@RequestParam(name = "state") DeviceState state) {
+        return this.deviceService.findAllByState(state);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteDeviceById(@PathVariable Long id){
+        this.deviceService.deleteById(id);
+        return ResponseEntity.ok("Device deleted");
     }
 
 }

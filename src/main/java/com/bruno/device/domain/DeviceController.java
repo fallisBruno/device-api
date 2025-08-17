@@ -20,6 +20,11 @@ public class DeviceController {
         return this.deviceService.create(deviceRecord);
     }
 
+    @PutMapping
+    public DeviceUpdateRecord updateDevice(@RequestBody DeviceUpdateRecord deviceRecord) throws DeviceNotFoundException {
+        return this.deviceService.updateDevice(deviceRecord);
+    }
+
     @GetMapping("/{id}")
     public DeviceRecord getDeviceById(@PathVariable Long id) {
         return this.deviceService.findById(id);

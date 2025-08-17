@@ -44,4 +44,10 @@ public class DeviceService {
     public List<DeviceRecord> findAllByState(DeviceState state) {
         return this.deviceRepository.findAllByState(state);
     }
+
+    public DeviceUpdateRecord updateDevice(DeviceUpdateRecord deviceRecord) throws DeviceNotFoundException {
+        if(!this.deviceRepository.existsById(deviceRecord.id())) throw new DeviceNotFoundException(deviceRecord.id());
+        Device device = this.deviceRepository.save(this.deviceMapper.fromUpdatetoEntity(deviceRecord));
+        return this.deviceMapper.toUpdateRecord(device);
+    }
 }

@@ -2,6 +2,8 @@ package com.bruno.device.domain;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDate;
 
@@ -17,6 +19,8 @@ public class Device {
 
     @Enumerated(EnumType.STRING)
     private DeviceState state;
+
+    @CreationTimestamp
     private LocalDate creationTime;
 
 }

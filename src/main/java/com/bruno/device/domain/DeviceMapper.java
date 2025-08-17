@@ -9,4 +9,8 @@ public interface DeviceMapper {
 
     DeviceRecord toRecord(Device device);
 
+    Device fromUpdatetoEntity(DeviceUpdateRecord deviceUpdateRecord);
+
+    DeviceUpdateRecord toUpdateRecord(Device device);
+
 }

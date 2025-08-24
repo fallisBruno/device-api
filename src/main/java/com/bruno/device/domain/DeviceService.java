@@ -37,7 +37,13 @@ public class DeviceService {
         return result;
     }
 
-    public void deleteById(Long id) {
+    public void deleteById(Long id) throws DeviceNotFoundException, DeviceInUseException {
+        Optional<Device> deviceOptional = this.deviceRepository.findById(id);
+
+        if(deviceOptional.isEmpty())
+            throw new DeviceNotFoundException(id);
+
+        validateDeviceInUse(deviceOptional.get());
 
         this.deviceRepository.deleteById(id);
     }
@@ -59,13 +65,18 @@ public class DeviceService {
 
         Device deviceFound = deviceOptional.get();
 
-        if(!Objects.equals(deviceToUpdate.brand(), deviceFound.getBrand())
-                || !Objects.equals(deviceToUpdate.name(), deviceFound.getName()))
+        if(isNameOrBrandDifferent(deviceToUpdate, deviceFound))
             validateDeviceInUse(deviceFound);
 
         Device deviceUpdated = this.deviceRepository.save(this.deviceMapper.fromUpdatetoEntity(deviceToUpdate));
         return this.deviceMapper.toUpdateRecord(deviceUpdated);
     }
+
+    private static boolean isNameOrBrandDifferent(DeviceUpdateRecord deviceToUpdate, Device deviceFound) {
+        return !Objects.equals(deviceToUpdate.brand(), deviceFound.getBrand())
+                || !Objects.equals(deviceToUpdate.name(), deviceFound.getName());
+    }
+
 
     private void validateDeviceInUse(Device deviceFound) throws DeviceInUseException {
         if (DeviceState.IN_USE.equals(deviceFound.getState()))

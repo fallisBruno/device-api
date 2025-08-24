@@ -49,7 +49,8 @@ public class DeviceController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteDeviceById(@PathVariable Long id){
+    public ResponseEntity<String> deleteDeviceById(@PathVariable Long id)
+            throws DeviceNotFoundException, DeviceInUseException {
         this.deviceService.deleteById(id);
         return ResponseEntity.ok("Device deleted");
     }

@@ -38,6 +38,7 @@ public class DeviceService {
     }
 
     public void deleteById(Long id) {
+
         this.deviceRepository.deleteById(id);
     }
 
@@ -60,13 +61,13 @@ public class DeviceService {
 
         if(!Objects.equals(deviceToUpdate.brand(), deviceFound.getBrand())
                 || !Objects.equals(deviceToUpdate.name(), deviceFound.getName()))
-            isDeviceInUse(deviceFound);
+            validateDeviceInUse(deviceFound);
 
-        Device device = this.deviceRepository.save(this.deviceMapper.fromUpdatetoEntity(deviceToUpdate));
-        return this.deviceMapper.toUpdateRecord(device);
+        Device deviceUpdated = this.deviceRepository.save(this.deviceMapper.fromUpdatetoEntity(deviceToUpdate));
+        return this.deviceMapper.toUpdateRecord(deviceUpdated);
     }
 
-    private void isDeviceInUse(Device deviceFound) throws DeviceInUseException {
+    private void validateDeviceInUse(Device deviceFound) throws DeviceInUseException {
         if (DeviceState.IN_USE.equals(deviceFound.getState()))
             throw new DeviceInUseException("Cannot modify name and/or brand when Device IN USE");
     }

@@ -1,9 +1,13 @@
 package com.bruno.device.domain;
 
+import com.bruno.device.exceptions.DeviceInUseException;
+import com.bruno.device.exceptions.DeviceNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class DeviceService {
@@ -45,9 +49,25 @@ public class DeviceService {
         return this.deviceRepository.findAllByState(state);
     }
 
-    public DeviceUpdateRecord updateDevice(DeviceUpdateRecord deviceRecord) throws DeviceNotFoundException {
-        if(!this.deviceRepository.existsById(deviceRecord.id())) throw new DeviceNotFoundException(deviceRecord.id());
-        Device device = this.deviceRepository.save(this.deviceMapper.fromUpdatetoEntity(deviceRecord));
+    public DeviceUpdateRecord updateDevice(DeviceUpdateRecord deviceToUpdate)
+            throws DeviceNotFoundException, DeviceInUseException {
+        Optional<Device> deviceOptional = this.deviceRepository.findById(deviceToUpdate.id());
+
+        if(deviceOptional.isEmpty())
+            throw new DeviceNotFoundException(deviceToUpdate.id());
+
+        Device deviceFound = deviceOptional.get();
+
+        if(!Objects.equals(deviceToUpdate.brand(), deviceFound.getBrand())
+                || !Objects.equals(deviceToUpdate.name(), deviceFound.getName()))
+            isDeviceInUse(deviceFound);
+
+        Device device = this.deviceRepository.save(this.deviceMapper.fromUpdatetoEntity(deviceToUpdate));
         return this.deviceMapper.toUpdateRecord(device);
+    }
+
+    private void isDeviceInUse(Device deviceFound) throws DeviceInUseException {
+        if (DeviceState.IN_USE.equals(deviceFound.getState()))
+            throw new DeviceInUseException("Cannot modify name and/or brand when Device IN USE");
     }
 }

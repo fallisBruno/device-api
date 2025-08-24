@@ -1,4 +1,4 @@
-package com.bruno.device.domain;
+package com.bruno.device.exceptions;
 
 public class DeviceNotFoundException extends Exception {
 

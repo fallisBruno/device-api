@@ -1,5 +1,7 @@
 package com.bruno.device.domain;
 
+import com.bruno.device.exceptions.DeviceInUseException;
+import com.bruno.device.exceptions.DeviceNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,7 +23,8 @@ public class DeviceController {
     }
 
     @PutMapping
-    public DeviceUpdateRecord updateDevice(@RequestBody DeviceUpdateRecord deviceRecord) throws DeviceNotFoundException {
+    public DeviceUpdateRecord updateDevice(@RequestBody DeviceUpdateRecord deviceRecord)
+            throws DeviceNotFoundException, DeviceInUseException {
         return this.deviceService.updateDevice(deviceRecord);
     }
 

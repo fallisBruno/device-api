@@ -20,7 +20,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({DeviceInUseException.class})
     public ResponseEntity<Object> handleDeviceInUseException(DeviceInUseException exception) {
         return ResponseEntity
-                .status(HttpStatus.NOT_FOUND)
+                .status(HttpStatus.UNPROCESSABLE_ENTITY)
                 .body(exception.getMessage());
     }
 

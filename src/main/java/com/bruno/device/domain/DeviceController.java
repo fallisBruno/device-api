@@ -29,7 +29,7 @@ public class DeviceController {
     }
 
     @GetMapping("/{id}")
-    public DeviceRecord getDeviceById(@PathVariable Long id) {
+    public DeviceRecord getDeviceById(@PathVariable Long id) throws DeviceNotFoundException {
         return this.deviceService.findById(id);
     }
 

@@ -26,8 +26,8 @@ public class DeviceService {
         return this.deviceMapper.toRecord(createdDevice);
     }
 
-    public DeviceRecord findById(long id){
-        return this.deviceRepository.findDeviceById(id);
+    public DeviceRecord findById(Long id) throws DeviceNotFoundException {
+        return this.deviceRepository.findDeviceById(id).orElseThrow(() -> new DeviceNotFoundException(id));
     }
 
     public List<DeviceRecord> getAll(){
